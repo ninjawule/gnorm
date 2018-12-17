@@ -6,15 +6,19 @@
 package main
 
 import (
+	"errors"
 	"log"
+	"os"
+	"regexp"
 
 	"github.com/magefile/mage/mg"
+	"github.com/magefile/mage/sh"
 )
 
 // Runs go install for gnorm.  This generates the embedded docs and the version
 // info into the binary.
 func Build() error {
-	mg.Deps(installHugo, installStatik)
+	mg.Deps(Generate)
 	if err := genSite(); err != nil {
 		return err
 	}
@@ -30,40 +34,34 @@ func Build() error {
 	return run("go", "install", "-tags", "make", "--ldflags="+ldf, "gnorm.org/gnorm")
 }
 
-// Generates binaries for all supported versions.  Currently that means a
-// combination of windows, linux, and OSX in 32 bit and 64 bit formats.  The
-// files will be dumped in the local directory with names according to their
-// supported platform.
-func All() error {
-	mg.Deps(installHugo, installStatik)
-	if err := genSite(); err != nil {
-		return err
-	}
-	defer cleanup()
+// Runs go generate.
+func Generate() error {
+	return sh.Run("go", "generate", "./...")
+}
 
-	ldf, err := flags()
-	if err != nil {
+// Generates a new release.  Expects the TAG environment variable to be set,
+// which will create a new tag with that name.
+func Release() (err error) {
+	releaseTag := regexp.MustCompile(`^v1\.[0-9]+\.[0-9]+$`)
+
+	tag := os.Getenv("TAG")
+	if !releaseTag.MatchString(tag) {
+		return errors.New("TAG environment variable must be in semver v1.x.x format, but was " + tag)
+	}
+
+	if err := sh.RunV("git", "tag", "-a", tag, "-m", tag); err != nil {
 		return err
 	}
-	for _, OS := range []string{"windows", "darwin", "linux"} {
-		for _, ARCH := range []string{"amd64", "386"} {
-			log.Printf("running go build for GOOS=%s GOARCH=%s", OS, ARCH)
-			env := []string{"GOOS=" + OS, "GOARCH=" + ARCH}
-			if err := runWith(env, "go", "build", "-tags", "make", "-o", "gnorm_"+OS+"_"+ARCH, "--ldflags="+ldf); err != nil {
-				return err
-			}
+	if err := sh.RunV("git", "push", "origin", tag); err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			sh.RunV("git", "tag", "--delete", "$TAG")
+			sh.RunV("git", "push", "--delete", "origin", "$TAG")
 		}
-	}
-	return err
-}
-
-func installHugo() error {
-	log.Print("downloading hugo")
-	return run("go", "get", "github.com/gohugoio/hugo")
-}
-func installStatik() error {
-	log.Print("downloading statik")
-	return run("go", "get", "github.com/rakyll/statik")
+	}()
+	return sh.RunV("goreleaser")
 }
 
 // Removes generated cruft.  This target shouldn't ever be necessary, since the

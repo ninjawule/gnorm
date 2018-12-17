@@ -18,7 +18,7 @@ import (
     "path/filepath"
 )
 func main() {
-	fmt.Println("```")
+	fmt.Println("```toml")
     gopath := os.Getenv("GOPATH")
 	f, err := os.Open(filepath.Join(gopath, "src", "gnorm.org", "gnorm", "cli", "gnorm.toml"))
 	if err != nil {
@@ -34,7 +34,7 @@ func main() {
 	fmt.Println("\n```")
 }
 gocog}}} -->
-```
+```toml
 # ConnStr is the connection string for the database.  Any environment variables
 # in this string will be expanded, so for example dbname=$MY_DDB will do the
 # right thing.
@@ -141,9 +141,11 @@ NoOverwriteGlobs = ["*.perm.go"]
 #
 # The enum path may be a template, in which case the values .Schema and .Enum
 # may be referenced, containing the name of the current schema and Enum being
-# rendered.  For example, "gnorm/{{.Schema}}/enums/{{.Enum}}.go" =
-# "enums.gotmpl" would render the enums.gotmpl template with data from the
-# "public.book_type" enum to ./gnorm/public/enums/users.go.
+# rendered.  For mysql enums, which are specific to a table, .Table will be
+# populated with the table name.  For example,
+# "gnorm/{{.Schema}}/enums/{{.Enum}}.go" = "enums.gotmpl" would render the
+# enums.gotmpl template with data from the "public.book_type" enum to
+# ./gnorm/public/enums/users.go.
 [EnumPaths]
 "{{.Schema}}/enums/{{.Enum}}.go" = "testdata/enum.tpl"
 
@@ -189,5 +191,21 @@ NoOverwriteGlobs = ["*.perm.go"]
 [Params]
 mySpecialValue = "some value"
 
+# TemplateEngine, if specified, describes a command line tool to run to
+# render your templates, allowing you to use your preferred templating
+# engine.  If not specified, go's text/template will be used to render.
+# [TemplateEngine]
+    # CommandLine is the command to run to render the template.  You may
+    # pass the following variables to the command line -
+    # {{.Data}} the name of a .json file containing the gnorm data serialized into json
+    # {{.Template}} - the name of the template file being rendered
+    # {{.Output}} the target file where output should be written
+    # CommandLine = ["yasha", "-v", "{{.Data}}", "{{.Template}}", "-o", "{{.Output}}"]
+
+    # If true, the json data will be sent via stdin to the rendering tool.
+    # UseStdin = false
+
+    # If true, the standard output of the tool will be written to the target file.
+    # UseStdout = false
 ```
 <!-- {{{end}}} -->
