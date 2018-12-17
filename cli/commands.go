@@ -9,8 +9,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"gnorm.org/gnorm/environ"
-	"gnorm.org/gnorm/run"
+	"github.com/ninjawule/gnorm/environ"
+	"github.com/ninjawule/gnorm/run"
 )
 
 var (

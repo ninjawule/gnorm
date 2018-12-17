@@ -3,7 +3,7 @@ package main // import "gnorm.org/gnorm"
 import (
 	"os"
 
-	"gnorm.org/gnorm/cli"
+	"github.com/ninjawule/gnorm/cli"
 )
 
 // This space used for gocog commands run across the website.

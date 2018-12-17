@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"gnorm.org/gnorm/run/data"
+	"github.com/ninjawule/gnorm/run/data"
 
 	"github.com/codemodus/kace"
 	"github.com/pkg/errors"

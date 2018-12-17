@@ -11,8 +11,8 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
-	"gnorm.org/gnorm/environ"
-	"gnorm.org/gnorm/run/data"
+	"github.com/ninjawule/gnorm/environ"
+	"github.com/ninjawule/gnorm/run/data"
 	yaml "gopkg.in/yaml.v2"
 )
 

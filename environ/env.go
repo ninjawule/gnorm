@@ -1,4 +1,4 @@
-package environ // import "gnorm.org/gnorm/environ"
+package environ // import "github.com/ninjawule/gnorm/environ"
 
 import (
 	"io"

@@ -1,4 +1,4 @@
-package postgres // import "gnorm.org/gnorm/database/drivers/postgres"
+package postgres // import "github.com/ninjawule/gnorm/database/drivers/postgres"
 
 import (
 	"database/sql"
@@ -10,9 +10,9 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 
-	"gnorm.org/gnorm/database"
-	"gnorm.org/gnorm/database/drivers/postgres/gnorm/columns"
-	"gnorm.org/gnorm/database/drivers/postgres/gnorm/tables"
+	"github.com/ninjawule/gnorm/database"
+	"github.com/ninjawule/gnorm/database/drivers/postgres/gnorm/columns"
+	"github.com/ninjawule/gnorm/database/drivers/postgres/gnorm/tables"
 )
 
 //go:generate gnorm gen

@@ -5,7 +5,7 @@ package columns
 import (
 	"database/sql"
 
-	"gnorm.org/gnorm/database/drivers/postgres/gnorm"
+	"github.com/ninjawule/gnorm/database/drivers/postgres/gnorm"
 )
 
 // Row represents a row from 'columns'.
