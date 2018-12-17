@@ -1,4 +1,4 @@
-package main // import "gnorm.org/gnorm"
+package main // import "github.com/ninjawule/gnorm"
 
 import (
 	"os"
