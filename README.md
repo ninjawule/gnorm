@@ -4,6 +4,14 @@
 <p align="center"><img src="https://user-images.githubusercontent.com/3185864/29906052-5fd530a2-8de0-11e7-964e-1112fb152ee1.png" /></p>
 <p align="center">GNORM is Not an ORM.</p>
 
+## PREAMBLE
+
+This fork is not meant to replace the original project, but is used for debugging purposes. 
+
+Right now, the recent commits to this fork deal with the compatibility issues with MySQL v8. 
+
+---
+
 ## About
 
 Gnorm converts your database's schema into in-memory data structures which you
